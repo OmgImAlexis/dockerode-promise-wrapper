@@ -1,11 +1,11 @@
-const Docker = require('dockerode')
+import Docker from 'dockerode'
 
 // Get functions in a prototype
 const getFunctions = object => Object.keys(Object.getPrototypeOf(object))
 
 // Functionally similar to DockerPromise, but for wrapping 'get' objects instead
 // Read explanaition below
-function DockerPromiseObject (object) {
+const DockerPromiseObject = function (object) {
   getFunctions(object).map(functionName => {
     this[functionName] = (...args) => new Promise((resolve, reject) => {
       object[functionName](...args, (err, data) => {
@@ -15,7 +15,7 @@ function DockerPromiseObject (object) {
   })
 }
 
-function DockerPromise (config) {
+export default function (config) {
   // Get dockerode Docker object
   const docker = new Docker(config)
   this.modem = docker.modem
@@ -45,6 +45,4 @@ function DockerPromise (config) {
       }
     })
   })
-}
-
-module.exports = DockerPromise
+};

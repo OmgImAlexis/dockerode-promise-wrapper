@@ -1,6 +1,5 @@
 import test from 'ava'
-
-const DockerPromise = require('./index')
+import DockerPromise from './index'
 
 const docker = new DockerPromise({
   socketPath: '/var/run/docker.sock'
@@ -24,7 +23,7 @@ test('get container', t => {
   t.plan(3)
   return new Promise((resolve, reject) => {
     if (!process.env.CONTAINER) {
-      reject("No test container defined for 'get container' test")
+      reject(new Error("No test container defined for 'get container' test"))
     }
     const containerPromise = docker.getContainer(process.env.CONTAINER)
     t.is(type(containerPromise), '[object Promise]', 'docker.getContainer(:id) is a Promise')
